@@ -29,12 +29,11 @@ document.addEventListener('DOMContentLoaded', function() {
   const btnBack = document.getElementById('btnBack');
   if (btnBack) {
     btnBack.addEventListener('click', function() {
-      // Ajusta la ruta según tu app
-      window.location.href = '/perfil.php';
+      window.location.href = '../Pages/profile.html';
     });
   }
 
-  // Envío simulado
+  // Envío simulado porque no hay backend
   const btnSubmit = document.getElementById('btnSubmit');
   if (btnSubmit) {
     btnSubmit.addEventListener('click', function() {
@@ -57,10 +56,6 @@ document.addEventListener('DOMContentLoaded', function() {
         btnSubmit.disabled = false;
         btnSubmit.textContent = originalText;
         mostrarAlertaTemporal('success', 'Pago reportado correctamente. Gracias.');
-        // opcional: limpiar formulario
-        // document.getElementById('codigoRef').value = '';
-        // document.getElementById('voucherFile').value = '';
-        // voucherName.textContent = '';
       }, 900);
     });
   }
