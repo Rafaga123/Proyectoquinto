@@ -3,21 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../Images/logo.ico" />
+    <link rel="stylesheet" href="CSS/semantic.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"/>
     <title>Inicio de sesión</title>
 </head>
 <body>
-    <?php include '../header.php';?>
-
-    <h1 class="ui header">Página de Login</h1>
-    
-    <form class="ui form">
-        <div class="field">
-            <label>Usuario</label>
-            <input type="text" name="usuario" placeholder="Usuario">
+    <link rel="stylesheet" href="../CSS/auth.css" />
+    <header class="ui menu">
+        <div class="ui container">
+            <a href="../index.html">
+                <img src="../Images/logoproyecto.png" alt="Por definir" width="40" height="35"/>
+            </a>
+            <a class="item" href="../index.html">Inicio</a>
+            <a class="item">¿Quiénes somos?</a>
+            <a class="item">Misión</a>
+            <a class="item">Visión</a>
+            <div class="right menu">
+                <a class="ui button" href="login.html">Iniciar sesión</a>
+                <a class="ui button" href="register.html">Registrarme</a>
+            </div>
         </div>
-        <button class="ui button" type="submit">Entrar</button>
-    </form>
+    </header>
 
-<?php include '../footer.php';?>
+    <main class="centered-form-container">
+        <form class="ui form segment" id="loginForm">
+            <h2 class="ui center aligned header" style="margin-bottom:1.5rem;">Iniciar sesión</h2>
+            <div class="field">
+                <label for="usuario">Usuario o Email</label>
+                <input type="text" id="usuario" name="usuario" placeholder="Usuario o Email" required>
+            </div>
+            <div class="field">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="Contraseña" required>
+                <span class="forgot-password-link" id="forgotPasswordLink">¿Olvidaste tu contraseña?</span>
+            </div>
+            <button class="ui button primary fluid" type="submit">Entrar</button>
+            <div class="form-links">
+                ¿No tienes cuenta? <a href="register.html">Regístrate</a>
+            </div>
+        </form>
+        <form class="ui form segment" id="forgotForm" style="display:none;">
+            <h2 class="ui center aligned header" style="margin-bottom:1.5rem;">Recuperar contraseña</h2>
+            <div class="field">
+                <label for="forgotEmail">Correo electrónico</label>
+                <input type="email" id="forgotEmail" name="forgotEmail" placeholder="Ingresa tu correo" required>
+            </div>
+            <button class="ui button primary fluid" type="submit">Enviar enlace</button>
+            <div class="form-links">
+                <a href="#" id="backToLogin">Volver a iniciar sesión</a>
+            </div>
+        </form>
+    </main>
+
+    <footer class="ui inverted vertical footer segment">
+        <div class="ui container">
+            <p>Hecho con <i class="heart icon"></i></p>
+        </div>
+    </footer>
+    <script src="../Scripts/jquery-3.7.1.min.js"></script>
+    <script src="../Scripts/semantic.min.js"></script>
+    <script src="../Scripts/script.js"></script>
+    <script>
+    $(function() {
+        $('#forgotPasswordLink').on('click', function(e) {
+            e.preventDefault();
+            $('#loginForm').hide();
+            $('#forgotForm').fadeIn(200);
+        });
+        $('#backToLogin').on('click', function(e) {
+            e.preventDefault();
+            $('#forgotForm').hide();
+            $('#loginForm').fadeIn(200);
+        });
+    });
+    </script>
 </body>
 </html>
