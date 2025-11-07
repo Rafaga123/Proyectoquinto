@@ -27,7 +27,7 @@
     </header>
 
     <main class="centered-form-container">
-        <form class="ui form segment horizontal-register-form" enctype="multipart/form-data">
+        <form id="register-form" class="ui form segment horizontal-register-form">
             <h2 class="ui center aligned header" style="margin-bottom:1.5rem;">Crear cuenta</h2>
             <div class="ui two column stackable grid">
                 <div class="column">
@@ -74,6 +74,7 @@
                         <input type="file" id="foto_perfil" name="foto_perfil" accept="image/*">
                     </div>
                     <button class="ui button primary fluid" type="submit" style="margin-top:2.5em;">Registrarme</button>
+                    <div id="error-message" class="ui red message" style="display: none;"></div> 
                     <div class="form-links">
                         ¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a>
                     </div>
@@ -89,6 +90,7 @@
     </footer>
     <script src="../Scripts/jquery-3.7.1.min.js"></script>
     <script src="../Scripts/semantic.min.js"></script>
+    <script src="../Scripts/register.js"></script>
     <script src="../Scripts/script.js"></script>
 </body>
 </html>

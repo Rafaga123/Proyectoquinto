@@ -401,3 +401,6 @@ FodyWeavers.xsd
 *.sln.iml
 .vscode/settings.json
 /.vscode
+
+# Ignorar archivos de entorno
+.env

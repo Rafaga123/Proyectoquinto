@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// --- NUESTROS MODELOS ---
+
+model Rol {
+  id        Int       @id @default(autoincrement())
+  nombre    String    @unique // "ADMINISTRADOR", "ENCARGADO_COMUNIDAD", "USUARIO_GENERAL"
+  usuarios  Usuario[] // Un Rol puede tener muchos Usuarios
+}
+
+model Usuario {
+  id            Int     @id @default(autoincrement())
+
+  cedula        String  @unique // Nuevo - Cédula
+  email         String  @unique // Correo
+  password_hash String  // Contraseña encriptada
+
+  primer_nombre     String
+  segundo_nombre    String? // Opcional (con el ?)
+  primer_apellido   String
+  segundo_apellido  String? // Opcional
+
+  fecha_nacimiento  DateTime? // Opcional (o quita el ? si es obligatorio)
+  foto_perfil_url   String?   // Opcional (aquí guardaremos la URL de la foto)
+
+  // La Relación con Rol
+  rol     Rol     @relation(fields: [id_rol], references: [id])
+  id_rol  Int     // Esta es la Llave Foránea
+}
