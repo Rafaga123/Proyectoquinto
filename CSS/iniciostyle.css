@@ -1,3 +1,13 @@
+/* Header blanco igual que login/register */
+.ui.menu {
+    background: white !important;
+    color: var(--color-texto) !important;
+    box-shadow: 0 4px 24px rgba(154,156,234,0.12);
+    border: 2px solid #213547 ;
+}
+.ui.menu .item {
+    color: var(--color-primario) !important;
+}
 
 :root {
     --color-primario: #9A9CEA;
@@ -15,19 +25,6 @@ body {
     padding: 0;
 }
 
-.ui.menu {
-    background-color: var(--color-secundario);
-    border: none;
-}
-
-.ui.menu .item {
-    color: white;
-    font-weight: bold;
-}
-
-.ui.menu .item.activo {
-    border-bottom: 2px solid var(--color-terciario);
-}
 
 .ui.button {
     background-color: var(--color-terciario);
@@ -52,6 +49,10 @@ body {
     text-align: center;
     bottom: 0;
     width: 100%;
+}
+
+.column{
+    background-color: white;
 }
 
 .ui.two.column.grid{
