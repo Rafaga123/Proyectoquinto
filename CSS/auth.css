@@ -1,0 +1,140 @@
+/*
+Estilos personalizados para login y registro
+*/
+:root {
+    --color-primario: #9A9CEA;
+    --color-secundario: #A2B9EE;
+    --color-terciario: #A2DCEE;
+    --color-cuaternario: #ADEEE2;
+    --color-texto: #213547;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+body {
+    background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-terciario) 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.centered-form-container {
+    flex: 1 0 auto;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ui.form.segment {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(154,156,234,0.12);
+    padding: 2.5rem 2rem;
+    max-width: 400px;
+    width: 100%;
+}
+
+.ui.form .field>label {
+    color: var(--color-primario);
+    font-weight: 600;
+}
+
+.ui.form .ui.input>input {
+    border-radius: 8px;
+    border: 1px solid var(--color-secundario);
+    background: #f7faff;
+    color: var(--color-texto);
+}
+
+.ui.form .ui.button.primary {
+    background: var(--color-primario);
+    color: #fff;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.ui.form .ui.button.primary:hover {
+    background: var(--color-terciario);
+    color: var(--color-texto);
+}
+
+.form-links {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+.form-links a {
+    color: var(--color-primario);
+    text-decoration: underline;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Estilos para el formulario de registro horizontal */
+
+.ui.form.segment.horizontal-register-form {
+    /* Hacer el contenedor más ancho específicamente para el registro */
+    max-width: 960px;
+    width: 100%;
+    padding: 2.5rem 2.5rem;
+}
+.horizontal-register-form .ui.grid {
+    margin: 0 !important;
+}
+.horizontal-register-form .column {
+    padding: 1.5rem 1.5rem 0 1.5rem !important;
+    border-right: 1px solid #f0f0f0;
+}
+.horizontal-register-form .column:last-child {
+    border-right: none;
+}
+.horizontal-register-form .field {
+    margin-bottom: 1.2em;
+}
+.horizontal-register-form input[type="file"] {
+    padding: 0.5em 0;
+}
+
+@media (max-width: 900px) {
+    .horizontal-register-form {
+        max-width: 98vw;
+    }
+    .horizontal-register-form .ui.grid {
+        flex-direction: column !important;
+    }
+    .horizontal-register-form .column {
+        border-right: none !important;
+        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: 2rem !important;
+    }
+    .horizontal-register-form .column:last-child {
+        border-bottom: none !important;
+    }
+}
+
+.forgot-password-link {
+    float: right;
+    font-size: 0.95em;
+    color: var(--color-secundario);
+    cursor: pointer;
+    margin-top: 0.2em;
+}
+
+@media (max-width: 600px) {
+    .ui.form.segment {
+        padding: 1.5rem 0.5rem;
+        max-width: 95vw;
+    }
+}
+
+.ui.vertical.footer {
+    background-color: rgb(80, 80, 80);
+    color: white;
+    text-align: center;
+    width: 100%;
+    flex-shrink: 0;
+}
