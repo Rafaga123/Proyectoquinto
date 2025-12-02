@@ -6,10 +6,15 @@
     <title>Prueba</title>
     <script src="../Scripts/jquery-3.7.1.min.js"></script>
     <script src="../Scripts/semantic.min.js"></script>
-    <script src="../Scripts/script.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script> <!-- Slick Carousel JS para el muro de anuncios -->
+    <script src="../Scripts/home_page.js"></script>
     <link rel="stylesheet" type="text/CSS" href="../CSS/semantic.css">       
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
-    <link rel="stylesheet" type="text/CSS" href="../CSS/style.css">
+    <link rel="stylesheet" type="text/CSS" href="../CSS/home_page.css">
+
+    <!-- Slick Carousel CSS para el muro de anuncios -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
 </head>
 <body>
     <div class="ui top fixed stackable menu" style="background-color: #9A9CEA;">
@@ -19,7 +24,7 @@
         </a>
         <!--Logo-->
         <div class="item">
-            <img src="img_sof/logo_neg.png" alt="Logo" style="height:32px; margin-left: 8px; margin-right:8px;">
+            <img src="../Images/logo_neg.png" alt="Logo" style="height:32px; margin-left: 8px; margin-right:8px;">
         </div>
 
         <!-- Menú derecho -->
@@ -30,11 +35,12 @@
             </div>
         </div>
     </div>
-    
+
     <div class="ui left vertical inverted sidebar labeled icon menu">
         <a class="item sidebar-toggle-btn">
             <br>
             <i class="large arrow left icon"></i>
+            Cerrar menú
             <br>
         </a>
         <a class="item">
@@ -57,23 +63,31 @@
 
     <div class="pusher">
         <br><br><br>
-        <h2>Muro de Anuncios</h2>
-        <br><br><br><br>
-        <div class="ui container">
-            <!--MURO DE ANUNCIOS-->
-            <div class="ui placeholder">
-                <div class="image header">
-                    <div class="line"></div>
-                    <div class="line"></div>
-                </div>
-                <div class="paragraph">
-                    <div class="line"></div>
-                    <div class="line"></div>
-                    <div class="line"></div>
-                    <div class="line"></div>
-                    <div class="line"></div>
+        <h2 class="ui center aligned header">Muro de Anuncios</h2>
+        <br>
+        <div class="announcement-carousel-container">
+            <div class="ui fluid card announcement-card">
+                <div class="content">
+                    <div class="header">Anuncio Reciente</div>
+                    <div class="meta">
+                        <span class="date">Fecha: 08/12/2025</span>
+                    </div>
+                    <div class="description">
+                        <div class="ui placeholder">
+                            <div class="image header">
+                                <div class="line"></div>
+                                <div class="line"></div>
+                            </div>
+                            <div class="paragraph">
+                                <div class="line"></div>
+                                <div class="line"></div>
+                                <div class="line"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            
         </div>
 
         <br><br><br><br><br>
@@ -97,7 +111,7 @@
                             </div>
                             <div class="extra content">
                                 <div class="right floated author">
-                                <img class="ui avatar image" src="./img_sof/Pagos.png">
+                                <img class="ui avatar image" src="../Images/Pagos.png">
                                 </div>
                             </div>
                     </a>
@@ -117,7 +131,7 @@
                             </div>
                             <div class="extra content">
                                 <div class="right floated author">
-                                <img class="ui avatar image" src="./img_sof/Encuestas.png">
+                                <img class="ui avatar image" src="../Images/Encuestas.png">
                                 </div>
                             </div>
                     </a>
@@ -138,7 +152,7 @@
                             </div>
                             <div class="extra content">
                                 <div class="right floated author">
-                                <img class="ui avatar image" src="./img_sof/foro.png">
+                                <img class="ui avatar image" src="../Images/foro.png">
                                 </div>
                             </div>
                     </a>
@@ -160,7 +174,7 @@
                             </div>
                             <div class="extra content">
                                 <div class="right floated author">
-                                <img class="ui avatar image" src="./img_sof/actividades.png">
+                                <img class="ui avatar image" src="../Images/actividades.png">
                                 </div>
                             </div>
                         </a>
@@ -181,7 +195,7 @@
                             </div>
                             <div class="extra content">
                                 <div class="right floated author">
-                                <img class="ui avatar image" src="./img_sof/reportes.png">
+                                <img class="ui avatar image" src="../Images/reportes.png">
                                 </div>
                             </div>
                         </a>
