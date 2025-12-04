@@ -88,6 +88,112 @@ h3{
     flex-grow: 1; 
 }
 
+/* Estilos para el Carrusel de Anuncios {*/
+
+        /* Contenedor principal que ayuda a centrar y da espacio a los laterales */
+        .announcement-carousel-container {
+            padding: 0 5%; 
+            margin-bottom: 50px;
+        }
+
+        /* El contenedor de Slick Carousel. Usamos 'ui container' para centrar */
+        .announcement-carousel.ui.container {
+            max-width: 900px !important; /* Limita el ancho, ajusta si es necesario */
+        }
+
+        /* Estilo base para cada slide (contenedor de la tarjeta) */
+        .slick-slide {
+            padding: 10px 15px; /* Espacio entre los anuncios */
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        /* Aplica el efecto de reducción y opacidad a los slides que NO son el centrado */
+        .slick-slide:not(.slick-center) .announcement-card {
+            transform: scale(0.85); /* Reduce el tamaño (efecto más pequeño/atrás) */
+            opacity: 0.6;           /* Hace semitransparentes los laterales */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra más sutil */
+        }
+
+        /* Estilo para el anuncio central (se le quita la transformación y se le sube la opacidad/sombra) */
+        .slick-center .announcement-card {
+            transform: scale(1); /* Tamaño normal */
+            opacity: 1; /* Opacidad completa */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); /* Sombra destacada */
+        }
+
+        /* --- Estilos para las Flechas de Navegación (Slick por defecto) --- */
+
+        /* Ocultar el contenido por defecto y darle estilo de botón redondo */
+        .slick-prev, .slick-next {
+            width: 45px;
+            height: 45px;
+            background: #9A9CEA !important; /* El color de tu menú */
+            border-radius: 50%;
+            z-index: 10;
+            transition: background-color 0.3s;
+            opacity: 1;
+        }
+
+        .slick-prev:before,
+        .slick-next:before {
+            content: none !important; /* Elimina el contenido de texto por defecto de Slick */
+        }
+
+        /* Posicionar las flechas fuera del área de contenido visible */
+        .slick-prev {
+            left: -70px;
+        }
+
+        .slick-next {
+            right: -70px;
+        }
+
+        /* Usar íconos de Font Awesome (incluidos en Semantic UI) como flechas */
+        /* Flecha Izquierda */
+        .slick-prev:after {
+            content: '\f053'; /* Unicode de 'chevron-left' en Font Awesome */
+            font-family: 'Font Awesome 5 Free'; 
+            font-weight: 900;
+            color: white;
+            font-size: 1.5em;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Flecha Derecha */
+        .slick-next:after {
+            content: '\f054'; /* Unicode de 'chevron-right' en Font Awesome */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: white;
+            font-size: 1.5em;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Responsividad para móviles: las flechas se pegan al borde y solo se muestra un slide */
+        @media (max-width: 767px) {
+            .slick-prev {
+                left: 5px; /* Pegar al borde */
+            }
+            .slick-next {
+                right: 5px; /* Pegar al borde */
+            }
+            .announcement-carousel-container {
+                padding: 0 5px; /* Reducir padding */
+            }
+            /* En vista móvil, aseguramos que el slide lateral no se vea reducido */
+            .slick-slide:not(.slick-center) .announcement-card {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+/*}*/
+
 /* Responsive */
 @media (max-width: 768px) {
     .pusher {

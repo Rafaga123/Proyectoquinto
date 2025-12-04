@@ -1,4 +1,3 @@
-//SIDEBAR
 document.addEventListener('DOMContentLoaded', function() { //Ejecuta la acción una vez esté completamente cargado el DOM
     
     //SIDEBAR 
@@ -28,6 +27,35 @@ document.addEventListener('DOMContentLoaded', function() { //Ejecuta la acción 
     // Asigna la función 'toggleSidebar' a todos los botones que tienen la clase
     toggleButtons.forEach(button => {
         button.addEventListener('click', toggleSidebar); //Ejecuta la funcion toggleSidebar al hacer click
+    });
+
+    // INICIALIZACIÓN DEL CARRUSEL DE ANUNCIOS
+    $('.announcement-carousel').slick({
+        centerMode: true,           // Centra el slide activo
+        centerPadding: '10px',      // Un pequeño padding si lo deseas
+        slidesToShow: 3,            // Muestra 3 slides (el central y los laterales)
+        infinite: true,             // Permite el desplazamiento infinito
+        dots: true,                 // Muestra los puntos de navegación inferiores
+        arrows: true,               // Muestra las flechas de navegación
+        autoplay: true,             // Opcional: auto-reproducción
+        autoplaySpeed: 5000,        // Tiempo de espera
+        
+        // RESPONSIVIDAD: Adaptación para diferentes tamaños de pantalla
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3
+                }
+            },
+            {
+                breakpoint: 768, // Para tablets
+                settings: {
+                    slidesToShow: 1, // En móviles/tablets pequeñas, solo muestra 1
+                    centerMode: true
+                }
+            }
+        ]
     });
 
 });
