@@ -1,11 +1,24 @@
+body{
+    background-image: url('../Images/Fondopagina.png');
+    background-size: cover; /* cubre toda la pantalla */
+    background-position: center center; /* centra la imagen */
+    background-repeat: no-repeat; /* no se repite */
+    background-attachment: fixed; /* queda fija al hacer scroll */
+    background-color: #f0f0f0; /* color de respaldo por si la imagen no carga */
+}
+
 h2{
     text-align: center;
+    font-weight: 700;
+    font-size: 2.5rem;
     color:#213547
 }
 
 h3{
     text-align: center;
-    color: #9A9CEA
+    font-weight: 600;
+    font-size: 1.8rem;
+    color: #9A9CEA;
 }
 
 .ui.card{
@@ -21,6 +34,14 @@ h3{
 
 .header {
     text-align: center;
+}
+
+.category{
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #5a5a5abb;
+    margin-top: 10px;
 }
 
 .pusher {
