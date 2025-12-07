@@ -18,11 +18,12 @@ h3{
     text-align: center;
     font-weight: 600;
     font-size: 1.8rem;
-    color: #9A9CEA;
+    color: #7b7fd6;
 }
 
 .ui.card{
-    background-color:#ADEEE2;
+    background: linear-gradient(to bottom, #adeee2, #a2dcee);
+    border-radius: 15px;
 }
 
 
@@ -33,6 +34,7 @@ h3{
 }
 
 .header {
+    padding-top: 10px;
     text-align: center;
 }
 
@@ -48,6 +50,7 @@ h3{
     margin-left: 0px;
     transition: margin-left 0.3s ease;
 }
+
 
 .sidebar-menu {
     width: 260px;
@@ -74,6 +77,33 @@ h3{
     cursor: pointer;
 }
 
+/*Habilita Flexbox en el Sidebar Contenedor */
+.ui.left.vertical.sidebar {
+    display: flex !important; 
+    /* Los elementos se apilan verticalmente */
+    flex-direction: column;
+}
+
+/* Hace que el contenedor de la imagen crezca */
+.sidebar-footer-image {
+    flex-grow: 1; /*Ocupa el espacio restante del sidebar */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Alinea la imagen a la parte inferior del espacio */
+    padding: 20px; /* Espacio de relleno para que no se pegue al borde */
+}
+
+/*Estilos de la Imagen*/
+.sidebar-footer-image img {
+    /* Asegura que la imagen no exceda el ancho del sidebar */
+    max-width: 100%; 
+    /* Define una altura máxima para que no empuje el menú */
+    max-height: 150px; 
+    /* Mantiene la proporción de la imagen */
+    height: auto; 
+
+}
+
 .large.arrow.left.icon {
     color: white;
     margin-left: 15px;
@@ -93,7 +123,7 @@ h3{
 .card-icon {
     font-size: 2.5em;
     margin-bottom: 15px;
-    color: #2185d0;
+    color: #9A9CEA;
 }
 
 /*Para que la tarjeta ocupe el 100% de la columna */
@@ -139,11 +169,11 @@ h3{
 .carousel-container {
     position: relative;
     overflow: hidden;
-    border-radius: 20px;
+    border-radius: 30px;
     margin-left: 200px;
-    margin-right: 200px;    
+    margin-right: 200px; 
+    background: linear-gradient(135deg, #a2b9ee, #ADEEE2) !important;   
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    background-color: #a2dcee;
     min-height: 250px;
 }
 

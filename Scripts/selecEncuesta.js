@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     initSidebar();
+    initCardDimmers();
 });
 
 function initSidebar() {
@@ -20,5 +21,11 @@ function initSidebar() {
     //Asigna la función a todos los botones que tienen la clase
     toggleButtons.forEach(button => {
         button.addEventListener('click', toggleSidebar); //Ejecuta la función al hacer click
+    });
+}
+
+function initCardDimmers() {
+    $('.blurring.dimmable.image').dimmer({
+        on: 'hover'
     });
 }

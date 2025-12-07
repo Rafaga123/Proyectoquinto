@@ -12,26 +12,17 @@ h1{
     text-align: center;
     font-weight: 700;
     font-size: 3rem;
-    color:#213547
+    color: black
 }
 
-.pusher {
-    margin-left: 0px;
-    transition: margin-left 0.3s ease;
+h3{
+    padding-top: 50px;
+    padding-left: 400px;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #7b7fd6;
 }
 
-.sidebar-menu {
-    width: 260px;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    z-index: 1000;
-    overflow-y: auto;
-}
-
-.main-content {
-    padding: 70px;
-}
 
 
 .pusher {
@@ -73,6 +64,7 @@ h1{
 /* Estilos para las tarjetas de encuesta */
 .ui.cards > .card,
 .ui.card {
+    background-color: #bdeefd; 
     display: flex; /* Convierte la tarjeta en un contenedor flex */
     flex-direction: column; /* Coloca los elementos hijos verticalmente */
 }
@@ -83,10 +75,81 @@ h1{
 
 /* Efecto pop-up*/
 .ui.cards > .card:hover {
+    background-color: #a2dcee;
     /* Aumenta la sombra para simular elevación (efecto pop-up) */
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-    /* Ligeramente más grande y elevado (Opcional, pero genial para pop-up) */
+    /* Ligeramente más grande y elevado*/
     transform: translateY(-5px); 
     /* El puntero cambia a mano para indicar que es interactivo */
     cursor: pointer;
+}
+
+.ui.inverted.button{
+    background-color: #9a9cea;
+    color: white;
+    
+}
+
+.ui.inverted.button:hover{
+    background-color: #7b7fd6;
+    color: white;
+}
+
+/*Habilita Flexbox en el Sidebar Contenedor */
+.ui.left.vertical.sidebar {
+    /* Es crucial que el sidebar sea un contenedor Flex */
+    display: flex !important; 
+    /* Los elementos se apilan verticalmente */
+    flex-direction: column;
+}
+
+/* Haz que el contenedor de la imagen crezca */
+.sidebar-footer-image {
+    /*Esto le dice a este div que debe tomar todo el espacio vertical 
+       restante dentro del sidebar */
+    flex-grow: 1; 
+    
+    /* Centra la imagen dentro de este espacio (opcional) */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Alinea la imagen a la parte inferior del espacio */
+    padding: 20px; /* Espacio de relleno para que no se pegue al borde */
+}
+
+/* 3. Estilos de la Imagen (Asegura que se ajuste) */
+.sidebar-footer-image img {
+    /* Asegura que la imagen no exceda el ancho del sidebar */
+    max-width: 100%; 
+    /* Define una altura máxima para que no empuje el menú */
+    max-height: 150px; 
+    /* Mantiene la proporción de la imagen */
+    height: auto; 
+
+}
+
+/* Espaciado para el botón de retorno */
+.button-margin-top {
+    margin-top: 50px;    /* Espacio arriba para separarlo de las tarjetas */
+    margin-bottom: 50px; /* Espacio abajo para separarlo del borde inferior */
+}
+
+/* Aplicamos todos los efectos a la clase principal del botón */
+.ui.huge.primary.button {
+    /* Base: Sombra sutil y Transición suave */
+    background-color: #9A9CEA;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: all 0.2s ease-in-out;
+}
+
+/* Efecto Hover (Elevación) */
+.ui.huge.primary.button:hover {
+    background-color: #7b7fd6;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.25); 
+    transform: translateY(-2px); 
+}
+
+/* Efecto Active (Hundimiento/Presionado) */
+.ui.huge.primary.button:active {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); 
+    transform: translateY(1px); 
 }
