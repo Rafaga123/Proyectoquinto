@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina Inicio</title>
+    <title>OIKOS - Pagina Inicio</title>
+    <link rel="shortcut icon" href="../Images/logo.ico" />
     <script src="../Scripts/jquery-3.7.1.min.js"></script>
     <script src="../Scripts/semantic.min.js"></script>
     <script src="../Scripts/home_page.js"></script>
@@ -12,72 +13,134 @@
     <link rel="stylesheet" type="text/CSS" href="../CSS/home_page.css">
 </head>
 <body>
-    <div class="ui top fixed stackable menu" style="background-color: #9A9CEA;">
-        <!-- Menú izquierdo -->
-        <a class="item sidebar-toggle-btn">
-            <i class="large sidebar icon"></i>
-        </a>
-        <!--Logo-->
+    <!-- Sidebar -->
+    <div class="ui vertical inverted sidebar menu sidebar-menu" style="background-color: #9A9CEA;">
         <div class="item">
-            <img src="img_sof/logo_neg.png" alt="Logo" style="height:32px; margin-left: 8px; margin-right:8px;">
-        </div>
-
-        <!-- Menú derecho -->
-        <div class="right menu">
-            <a class="item" href="../Pages/profile.html" style="color: white;">Perfil</a>
-        </div>
+            <div class="header">
+                <h2 class="ui inverted header">
+                    <i class="home icon"></i>
+                    <div class="content">
+                        Habitante
+                        <div class="sub header">Gestión de vivienda</div>
+                    </div>
+                </h2>
             </div>
+        </div>
+        <div class="item">
+            <div class="menu">
+                <a class="item sidebar-toggle-btn">
+                    <br>
+                    <i class="large arrow left icon"></i>
+                    Cerrar menú
+                    <br>
+                </a>
+                <a class="active item">
+                    <i class="book icon"></i>
+                    Reglamento del Condominio
+                </a>
+                <a class="item" href="gestion_habitantes.html">
+                    <i class="clock icon"></i>
+                    Horarios
+                </a>
+                <a class="item">
+                    <i class="credit card icon"></i>
+                    Cuentas para Pagos
+                </a>
+                <a class="item">
+                    <i class="cogs icon"></i>
+                    Configuración
+                </a>
             </div>
         </div>
-    </div>
-
-    <div class="ui left vertical inverted sidebar labeled icon menu">
-        <a class="item sidebar-toggle-btn">
-            <br>
-            <i class="large arrow left icon"></i>
-            Cerrar menú
-            <br>
-        </a>
-        <a class="item">
-            <i class="user icon"></i>
-            Perfil
-        </a>
-        <a class="item">
-            <i class="book icon"></i>
-            Reglamento del Condominio
-        </a>
-        <a class="item">
-            <i class="clock icon"></i>
-            Horarios
-        </a>
-        <a class="item">
-            <i class="credit card icon"></i>
-            Cuentas para Pagos
-        </a>
+        <div class="item">
+            <div class="ui divider" ></div>
+            <a class="item" href="../index.html">
+                <i class="sign out icon"></i>
+                Cerrar Sesión
+            </a>
+        </div>
+        <div class="sidebar-footer-image">
+            <img src="../Images/logo_neg.png" alt="Decoración de Sidebar">
+        </div>
     </div>
 
     <div class="pusher">
-        <br><br><br>
-        <h2>Muro de Anuncios</h2>
-        <br><br><br><br>
-        <div class="ui container">
-            <!--MURO DE ANUNCIOS-->
-            <div class="ui placeholder">
-                <div class="image header">
-                    <div class="line"></div>
-                    <div class="line"></div>
+        <!--Menú Superior-->
+        <div class="ui top fixed stackable menu" style="background-color: #9A9CEA;">
+            <div class="ui container">
+                <div class="item">
+                    <img src="../Images/logopng.png" alt="Logo"> <!--logo de la pagina-->
                 </div>
-                <div class="paragraph">
-                    <div class="line"></div>
-                    <div class="line"></div>
-                    <div class="line"></div>
-                    <div class="line"></div>
-                    <div class="line"></div>
+                <a class="item" id="sidebar-toggle"><!--activador del sidebar-->
+                    <i class="sidebar icon" style="color: white;"></i><!--Icono del sidebar-->
+                </a>
+                <div class="header item" style="color: white;"><!--color y titulo del menu superior-->
+                    Gestión de Vivienda
+                </div>
+                <div class="right menu">
+                    <div class="ui dropdown item" style="color: white;">
+                        <i class="user icon" style="color: white;"></i> Habitante
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <a class="item"><i class="user icon"></i> Mi Perfil</a>
+                            <a class="item"><i class="cog icon"></i> Configuración</a>
+                            <div class="divider"></div>
+                            <a class="item"><i class="sign out icon"></i> Cerrar Sesión</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <br><br><br>
+        <h2 class="carousel-header">Muro de Anuncios</h2>
+        <br>
+        <!--Muro de anuncios-->
+        <div class="announcement-caroulsel">
+            <div class="carousel-nav">
+                <button class="carousel-btn prev-btn">
+                    <i class="chevron left icon"></i>
+                </button>
+                <button class="carousel-btn next-btn">
+                    <i class="chevron right icon"></i>
+                </button>
+            </div>
+            <div class="carousel-container">
+                <!--Aquí irían los anuncios dinámicos desde la base de datos-->
+                <!--placeholders de ejemplo-->
 
-        <br><br><br><br><br>
+                <!-- Anuncio 1 -->
+                <div class="carousel-slide active">
+                    <h3 class="announcement-title">Mantenimiento de áreas comunes</h3>
+                    <div class="announcement-date">Publicado: 01 de Diciembre, 2025</div>
+                    <div class="announcement-content">
+                        <p>Estimados residentes, les informamos que el próximo lunes 8 de diciembre se realizará mantenimiento de las áreas verdes y limpieza profunda de la piscina. Agradecemos su comprensión.</p>
+                    </div>
+                </div>
+
+                <!-- Anuncio 2 -->
+                <div class="carousel-slide">
+                    <h3 class="announcement-title">Reunión de Condominio</h3>
+                    <div class="announcement-date">Publicado: 30 de noviembre, 2025</div>
+                    <div class="announcement-content">
+                        <p>Convocamos a todos los residentes a la reunión ordinaria que se llevará a cabo el próximo sábado 6 de diciembre a las 10:00 AM en el salón comunal.</p>
+                        <p>Temas a tratar: Presupuesto 2026, mejoras en seguridad, y actividades navideñas.</p>                        
+                    </div>
+                </div>
+
+                <!-- Anuncio 3 -->
+                <div class="carousel-slide">
+                    <h3 class="announcement-title">Nuevo sistema de vigilancia</h3>
+                    <div class="announcement-date">Publicado: 28 de Noviembre, 2025</div>
+                    <div class="announcement-content">
+                        <p>Se han instalado nuevas cámaras de seguridad en los accesos principales y áreas comunes. El sistema estará operativo a partir del 5 de diciembre.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-indicators">
+                <!--Los indicadores se generarán dinámicamente con JS-->
+            </div>
+        </div>
+        <br>
         <!--Cajas de elección-->
         <h3>Consulte información acerca de:</h3>
 
@@ -85,12 +148,12 @@
             <div class="ui stackable three column grid">
                 <!--PAGOS-->
                 <div class="column">
-                    <a class="ui card full-height-card" href="https://youtu.be/j-RpvIuazmc?si=577HPueWEx2QYDl_">
+                    <a class="ui card full-height-card" href="pagar.html">
                             <div class="content">
                                 <div class="header">Pagos</div>
                                 <div class="meta">
                                     <br>
-                                <span class="category">Haga seguimiento de los pagos que ha realizado</span>
+                                <span class="category">Reporte y haga seguimiento de los pagos que ha realizado</span>
                                 </div>
                                 <div class="description">
                                 <p></p>
@@ -98,14 +161,14 @@
                             </div>
                             <div class="extra content">
                                 <div class="right floated author">
-                                <img class="ui avatar image" src="./img_sof/Pagos.png">
+                                <img class="ui avatar image" src="../Images/Pagos.png">
                                 </div>
                             </div>
                     </a>
                 </div>
                 <!--ENCUESTAS-->
                 <div class="column">
-                    <a class="ui card full-height-card" href="https://youtu.be/UNo0TG9LwwI?si=ZLFwAaSF7wmkirNF">
+                    <a class="ui card full-height-card" href="selecEncuesta.html">
                             <div class="content">
                                 <div class="header">Encuestas</div>
                                 <div class="meta">
@@ -118,7 +181,7 @@
                             </div>
                             <div class="extra content">
                                 <div class="right floated author">
-                                <img class="ui avatar image" src="./img_sof/Encuestas.png">
+                                <img class="ui avatar image" src="../Images/Encuestas.png">
                                 </div>
                             </div>
                     </a>
@@ -126,7 +189,7 @@
 
                 <!--FORO-->
                 <div class="column">
-                    <a class="ui card full-height-card" href="https://youtu.be/Fc7-Oe0tj5k?si=_Vdu7DB3Pzi1bg0j">
+                    <a class="ui card full-height-card" href="foro.html">
                             <div class="content">
                                 <div class="header">Foro</div>
                                 <div class="meta">
@@ -139,7 +202,7 @@
                             </div>
                             <div class="extra content">
                                 <div class="right floated author">
-                                <img class="ui avatar image" src="./img_sof/foro.png">
+                                <img class="ui avatar image" src="../Images/foro.png">
                                 </div>
                             </div>
                     </a>
@@ -161,7 +224,7 @@
                             </div>
                             <div class="extra content">
                                 <div class="right floated author">
-                                <img class="ui avatar image" src="./img_sof/actividades.png">
+                                <img class="ui avatar image" src="../Images/actividades.png">
                                 </div>
                             </div>
                         </a>
@@ -182,7 +245,7 @@
                             </div>
                             <div class="extra content">
                                 <div class="right floated author">
-                                <img class="ui avatar image" src="./img_sof/reportes.png">
+                                <img class="ui avatar image" src="../Images/reportes.png">
                                 </div>
                             </div>
                         </a>

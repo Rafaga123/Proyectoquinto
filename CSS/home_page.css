@@ -1,91 +1,10 @@
-h2{
-    text-align: center;
-    color:#213547
-}
-
-h3{
-    text-align: center;
-    color: #9A9CEA
-}
-
-.ui.card{
-    background-color:#ADEEE2;
-}
-
-
-.ui.placeholder {
-    color: #ADEEE2;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.header {
-    text-align: center;
-}
-
-.pusher {
-    margin-left: 0px;
-    transition: margin-left 0.3s ease;
-}
-
-.sidebar-menu {
-    width: 260px;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    z-index: 1000;
-    overflow-y: auto;
-}
-
-.main-content {
-    padding: 70px;
-}
-
-
-.ui.left.vertical.inverted.sidebar.labeled.icon.menu{
-    background-color: #9A9CEA;
-}
-
-.ui.card.link-card {
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-        
-.ui.card.link-card:hover { /*sombra de las linkcards*/
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-        
-.card-icon {
-    font-size: 2.5em;
-    margin-bottom: 15px;
-    color: #2185d0;
-}
-
-
-.large.sidebar.icon {
-    color: white;
-    margin-top: 25px;
-    margin-left: 15px;
-    cursor: pointer;
-}
-
-.large.arrow.left.icon {
-    color: white;
-    margin-left: 15px;
-    cursor: pointer;
-}
-
-/*Para que la tarjeta ocupe el 100% de la columna */
-.full-height-card {
-    height: 100%; 
-    display: flex; /*Convierte la tarjeta en un contenedor flexible */
-    flex-direction: column;
-}
-
-/*Permite que el contenido del cuerpo de la tarjeta se estire */
-.full-height-card .content {
-    flex-grow: 1; 
+body{
+    background-image: url('../Images/Fondopagina.png');
+    background-size: cover; /* cubre toda la pantalla */
+    background-position: center center; /* centra la imagen */
+    background-repeat: no-repeat; /* no se repite */
+    background-attachment: fixed; /* queda fija al hacer scroll */
+    background-color: #f0f0f0; /* color de respaldo por si la imagen no carga */
 }
 
 /* Responsive */
@@ -106,4 +25,295 @@ h3{
     .cards-container {
         grid-template-columns: 1fr;
     }
+}
+
+h2{
+    text-align: center;
+    font-weight: 700;
+    font-size: 2.5rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color:#213547;
+}
+
+h3{
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.8rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #7b7fd6;
+}
+
+.ui.card{
+    background: linear-gradient(to bottom, #adeee2, #a2dcee);
+    border-radius: 15px;
+}
+
+
+.ui.placeholder {
+    color: #ADEEE2;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header {
+    padding-top: 10px;
+    text-align: center;
+}
+
+.category{
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #5a5a5abb;
+    margin-top: 10px;
+}
+
+.pusher {
+    margin-left: 0px;
+    transition: margin-left 0.3s ease;
+}
+
+
+.pusher{
+    margin-left: 0px;
+    transition: none;
+}
+
+.sidebar-menu {
+    width: 260px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 1001;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.sidebar-menu.visible {
+    transform: translateX(0);
+}
+
+/*Aumentar el tamaño de la letra de todos los elementos del menú */
+.sidebar-menu .item {
+    /*Aumenta la fuente de todo el texto del item*/
+    font-size: 1.15em; 
+    
+    /*Añade más espacio vertical entre los items para que se vean mejor*/
+    padding-top: 18px !important;
+    padding-bottom: 18px !important;
+}
+
+/*Aumentar el tamaño de los iconos dentro de los elementos del menú*/
+.sidebar-menu .item i.icon {
+    /*Aumenta el tamaño de la fuente del icono*/
+    font-size: 1.5em !important;
+    
+    /*Asegura que haya más espacio entre el icono y el texto */
+    margin-right: 15px !important; 
+}
+
+.main-content {
+    padding: 70px;
+    width:100%;
+}
+
+
+
+.ui.left.vertical.inverted.sidebar.labeled.icon.menu{
+    background-color: #9A9CEA;
+}
+
+.large.sidebar.icon {
+    color: white;
+    margin-top: 25px;
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+/*Habilita Flexbox en el Sidebar Contenedor */
+.ui.left.vertical.sidebar {
+    display: flex !important; 
+    /* Los elementos se apilan verticalmente */
+    flex-direction: column;
+}
+
+/* Hace que el contenedor de la imagen crezca */
+.sidebar-footer-image {
+    flex-grow: 1; /*Ocupa el espacio restante del sidebar */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Alinea la imagen a la parte inferior del espacio */
+    padding: 20px; /* Espacio de relleno para que no se pegue al borde */
+}
+
+/*Estilos de la Imagen*/
+.sidebar-footer-image img {
+    /* Asegura que la imagen no exceda el ancho del sidebar */
+    max-width: 100%; 
+    /* Define una altura máxima para que no empuje el menú */
+    max-height: 150px; 
+    /* Mantiene la proporción de la imagen */
+    height: auto; 
+
+}
+
+
+.ui.card.link-card {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+        
+.ui.card.link-card:hover { /*sombra de las linkcards*/
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+        
+.card-icon {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    color: #9A9CEA;
+}
+
+/*Para que la tarjeta ocupe el 100% de la columna */
+.full-height-card {
+    height: 100%; 
+    display: flex; /*Convierte la tarjeta en un contenedor flexible */
+    flex-direction: column;
+}
+
+/*Permite que el contenido del cuerpo de la tarjeta se estire */
+.full-height-card .content {
+    flex-grow: 1; 
+}
+
+/* Estilos para el carrusel de Slick */
+.announcement-carousel {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.carousel-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 30px;
+    margin-left: 200px;
+    margin-right: 200px; 
+    background: linear-gradient(135deg, #a2b9ee, #ADEEE2) !important;   
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    min-height: 250px;
+}
+
+.carousel-slide {
+    display: none;
+    padding: 30px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.carousel-slide.active {
+    display: block;
+}
+
+.carousel-nav {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 50%;
+    left: 50px;
+    right: 50px;
+    transform: translateY(-50%);
+    z-index: 10;
+    padding: 0 15px;
+}
+
+.carousel-btn {
+    background-color: rgba(154, 156, 234, 0.8);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.carousel-btn.prev-btn {
+    position: absolute;
+    left: 20px; /* Fuera del contenedor a la izquierda */
+    top: -220px; /*Altura del boton*/
+}
+
+.carousel-btn.next-btn {
+    position: absolute;
+    right: 20px; /*Fuera del contenedor a la derecha*/
+    top: -220px; /*Altura del boron*/
+}
+
+
+.carousel-btn:hover {
+    background-color: #7b7fd6;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.25); 
+    transform: translateY(-2px); 
+}
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.indicator.active {
+    background-color: #9A9CEA;
+}
+
+.announcement-title {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.announcement-date {
+    color: #777;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.announcement-content {
+    color: #555;
+    font-size: 1.5em;
+    line-height: 1.5;
+}
+
+.no-announcements {
+    text-align: center;
+    padding: 40px;
+    color: #777;
+    font-style: italic;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.carousel-header {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #444;
 }
