@@ -371,3 +371,14 @@
         //La función 'toggle' lo abrirá si está cerrado, y lo cerrará si está abierto.
         $('.ui.sidebar').sidebar('toggle');
     });
+
+    function exportar(){
+        let tabla = document.getElementById
+        ("tabla").outerHTML;
+        let url = 'data.application/vnd.ms-excel,' + encodeURIComponent(tabla);
+        let a = document.createElement("a");
+
+        a.href = url;
+        a.download = "datos.xls";
+        a.click();
+    }
