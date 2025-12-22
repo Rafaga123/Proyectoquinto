@@ -28,12 +28,6 @@
         </div>
         <div class="item">
             <div class="menu">
-                <a class="item sidebar-toggle-btn">
-                    <br>
-                    <i class="large arrow left icon"></i>
-                    Cerrar menú
-                    <br>
-                </a>
                 <a class="item" href="admin.html">
                     <i class="home icon"></i>
                     Panel de Control
@@ -42,14 +36,11 @@
                     <i class="users icon"></i>
                     Habitantes
                 </a>
-                <a class="item">
+                <a class="item" href="solicitudes.html">
                     <i class="chart bar icon" href=""></i>
                     Solicitudes
                 </a>
-                <a class="item">
-                    <i class="cogs icon"></i>
-                    Configuración
-                </a>
+                
             </div>
         </div>
         <div class="item">
@@ -111,7 +102,7 @@
                             <i class="plus icon"></i>
                             Agregar Habitante
                         </button>
-                        <button class="ui button">
+                        <button class="ui button" onclick="exportarExcel()">
                             <i class="download icon"></i>
                             Exportar
                         </button>
@@ -146,7 +137,7 @@
                 
                 <!-- Habitants Table -->
                 <div class="table-container">
-                    <table class="ui striped table">
+                    <table class="ui striped table" id="miTabla">
                         <thead>
                             <tr>
                                 <th>ID</th>

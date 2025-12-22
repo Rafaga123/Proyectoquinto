@@ -233,9 +233,6 @@
                                 <button class="ui compact icon button payment-btn" data-id="${habitant.id}">
                                     <i class="dollar sign icon"></i>
                                 </button>
-                                <button class="ui compact icon button delete-btn" data-id="${habitant.id}">
-                                    <i class="trash icon"></i>
-                                </button>
                             </div>
                         </td>
                     </tr>
@@ -370,4 +367,31 @@
     $(allToggleSelectors).click(function() {
         //La función 'toggle' lo abrirá si está cerrado, y lo cerrará si está abierto.
         $('.ui.sidebar').sidebar('toggle');
+
     });
+    
+function exportarExcel() {
+        // Obtener la tabla
+        const tabla = document.getElementById("miTabla");
+        
+        // Crear contenido HTML para el archivo
+        let html = tabla.outerHTML;
+        
+        // Crear un blob (archivo binario) con el contenido
+        const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+        
+        // Crear un enlace temporal para descargar
+        const enlace = document.createElement("a");
+        enlace.href = URL.createObjectURL(blob);
+        enlace.download = "tabla.xls"; // Nombre del archivo
+        
+        // Simular click en el enlace
+        document.body.appendChild(enlace);
+        enlace.click();
+        
+        // Limpiar
+        document.body.removeChild(enlace);
+    }
+    
+
+    

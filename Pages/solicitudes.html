@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitudes</title>
+    <link rel="shortcut icon" href="Images/logo.ico" />
+    <script src="../Scripts/jquery-3.7.1.min.js"></script>
+    <script src="../Scripts/semantic.min.js"></script>
+    <link rel="stylesheet" type="text/CSS" href="../CSS/semantic.css">       
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"> 
+    <link rel="stylesheet" href="../CSS/solicitudes.css">
+</head>
+<body>
+    <!-- Overlay para móviles -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <div class="ui vertical inverted sidebar menu sidebar-menu" style="background-color: #9A9CEA;">
+        <div class="item">
+            <div class="header">
+                <h2 class="ui inverted header">
+                    <i class="cog icon"></i>
+                    <div class="content">
+                        Panel Gestor
+                        <div class="sub header">Gestión de Habitantes</div>
+                    </div>
+                </h2>
+            </div>
+        </div>
+        <div class="item">
+            <div class="menu">
+                <a class="active item" href="admin.html">
+                    <i class="home icon"></i>
+                    Panel de Control
+                </a>
+                <a class="item" href="gestion_habitantes.html">
+                    <i class="users icon"></i>
+                    Habitantes
+                </a>
+                <a class="item" href="solicitudes.html">
+                    <i class="chart bar icon"></i>
+                    Solicitudes
+                </a>
+                
+            </div>
+        </div>
+        <div class="item">
+            <div class="ui divider"></div>
+            <a class="item" href="../index.html">
+                <i class="sign out icon"></i>
+                Cerrar Sesión
+            </a>
+        </div>
+        <div class="sidebar-footer-image">
+            <img src="../Images/logopng.png" alt="Decoración de Sidebar">
+        </div>
+    </div>
+
+    <!--contenido de la pagina del gestor-->
+    <div class="pusher">
+        <!--Menú Superior-->
+        <div class="ui top fixed stackable menu" style="background-color: #9A9CEA;">
+            <div class="ui container">
+                <div class="item">
+                    <img src="../Images/logopng.png" alt="Logo"> <!--logo de la pagina-->
+                </div>
+                <a class="item" id="sidebar-toggle"><!--activador del sidebar-->
+                    <i class="sidebar icon" style="color: white;"></i><!--Icono del sidebar-->
+                </a>
+                <div class="header item" style="color: white;"><!--color y titulo del menu superior-->
+                    Solicitudes
+                </div>
+                <div class="right menu">
+                    <div class="ui dropdown item" style="color: white;">
+                        <i class="user icon" style="color: white;"></i> Gestor
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <a class="item"><i class="user icon"></i> Mi Perfil</a>
+                            
+                            <div class="divider"></div>
+                            <a class="item" href="../index.html"><i class="sign out icon"></i> Cerrar Sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="ui container">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1 class="ui header">
+                            <i class="exclamation circle icon"></i>
+                            <div class="content">
+                                Solicitudes y Quejas
+                                <div class="sub header">Gestiona las quejas y solicitudes de los habitantes</div>
+                            </div>
+                        </h1>
+                    </div>
+                    <button class="ui primary button" id="mark-all-reviewed">
+                        <i class="check circle icon"></i>
+                        Marcar Todas como Revisadas
+                    </button>
+                </div>
+                
+                <div class="ui divider"></div>
+                
+                <!-- Estadísticas -->
+                <div class="stats-cards">
+                    <div class="stat-card pendiente">
+                        <div class="stat-number" id="pending-count">0</div>
+                        <div class="stat-label">Pendientes</div>
+                    </div>
+                    <div class="stat-card revision">
+                        <div class="stat-number" id="review-count">0</div>
+                        <div class="stat-label">En Revisión</div>
+                    </div>
+                    <div class="stat-card resuelta">
+                        <div class="stat-number" id="resolved-count">0</div>
+                        <div class="stat-label">Resueltas</div>
+                    </div>
+                    <div class="stat-card rechazada">
+                        <div class="stat-number" id="rejected-count">0</div>
+                        <div class="stat-label">Rechazadas</div>
+                    </div>
+                </div>
+                
+                <!-- Filtros -->
+                <div class="filters-container">
+                    <h3 class="ui header">Filtros</h3>
+                    <div class="ui form">
+                        <div class="fields">
+                            <div class="field">
+                                <label>Estado</label>
+                                <select class="ui dropdown" id="status-filter">
+                                    <option value="all">Todos los estados</option>
+                                    <option value="pendiente">Pendiente</option>
+                                    <option value="revision">En Revisión</option>
+                                    <option value="resuelta">Resuelta</option>
+                                    <option value="rechazada">Rechazada</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Categoría</label>
+                                <select class="ui dropdown" id="category-filter">
+                                    <option value="all">Todas las categorías</option>
+                                    <option value="mantenimiento">Mantenimiento</option>
+                                    <option value="ruido">Ruido</option>
+                                    <option value="limpieza">Limpieza</option>
+                                    <option value="seguridad">Seguridad</option>
+                                    <option value="otros">Otros</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Fecha</label>
+                                <select class="ui dropdown" id="date-filter">
+                                    <option value="all">Todas las fechas</option>
+                                    <option value="today">Hoy</option>
+                                    <option value="week">Esta semana</option>
+                                    <option value="month">Este mes</option>
+                                    <option value="older">Más antiguas</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>&nbsp;</label>
+                                <button class="ui button" id="reset-filters">
+                                    <i class="redo icon"></i>
+                                    Restablecer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contenedor de Solicitudes -->
+                <div class="requests-container">
+                    <h2 class="ui header">
+                        <i class="list icon"></i>
+                        <div class="content">
+                            Lista de Solicitudes
+                            <div class="sub header" id="requests-count">0 solicitudes encontradas</div>
+                        </div>
+                    </h2>
+                    
+                    <!-- Lista de Solicitudes -->
+                    <div class="requests-list" id="requests-list">
+                        <!-- Las solicitudes se cargarán dinámicamente aquí -->
+                        <div class="empty-state">
+                            <i class="inbox icon"></i>
+                            <h3>No hay solicitudes pendientes</h3>
+                            <p>Todas las quejas y solicitudes han sido atendidas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para detalles -->
+    <div class="ui modal" id="request-details-modal">
+        <i class="close icon"></i>
+        <div class="header" id="modal-title">Detalles de la Solicitud</div>
+        <div class="content">
+            <div class="request-details" id="request-details-content">
+                <!-- Los detalles se cargarán dinámicamente aquí -->
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui black deny button">
+                Cerrar
+            </div>
+            <div class="ui primary button" id="resolve-request-btn">
+                <i class="check icon"></i>
+                Marcar como Resuelta
+            </div>
+        </div>
+    </div>
+
+    <script src="../Scripts/solicitudes.js"></script>
+</body>
+</html>
