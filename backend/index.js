@@ -4,6 +4,7 @@ const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 
 const prisma = new PrismaClient();
 const app = express();
@@ -29,12 +30,12 @@ const verificarToken = (req, res, next) => {
   });
 };
 
-// --- FUNCIÓN DE INICIALIZACIÓN (Se ejecuta al iniciar el servidor) ---
 async function inicializarRoles() {
   // Estos nombres deben coincidir EXACTAMENTE con tu enum RolNombre en schema.prisma
   const rolesNecesarios = ['ADMINISTRADOR', 'ENCARGADO_COMUNIDAD', 'HABITANTE'];
   
-  console.log("🔄 Verificando roles en la base de datos...");
+  console.log("Verificando roles en la base de datos...");
+
   
   for (const nombreRol of rolesNecesarios) {
     // Buscamos si el rol ya existe
@@ -45,11 +46,29 @@ async function inicializarRoles() {
     // Si no existe, lo creamos
     if (!existe) {
       await prisma.rol.create({ data: { nombre: nombreRol } });
-      console.log(`✅ Rol creado: ${nombreRol}`);
+      console.log(`Rol creado: ${nombreRol}`);
     }
   }
-  console.log("✨ Sistema de roles listo.");
+  console.log("Sistema de roles listo.");
 }
+
+// --- Password reset helpers (scope global) ---
+function buildResetToken(payload) {
+  return jwt.sign(payload, process.env.JWT_SECRET || 'secreto_super_seguro', { expiresIn: '1h' });
+}
+
+// Configuración de Nodemailer (Gmail SMTP)
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.SMTP_USER || 'correoderecuperacion869@gmail.com',
+    pass: process.env.SMTP_PASS || 'xyfn gyek lies jvxa'
+  },
+  logger: true,
+  debug: true
+});
 
 // --- ENDPOINTS ---
 
@@ -100,7 +119,7 @@ app.post('/api/registro', async (req, res) => {
       }
     });
 
-    console.log("✅ Usuario registrado:", nuevoUsuario.email); // Log de confirmación
+    console.log("Usuario registrado:", nuevoUsuario.email); // Borrar esto luego Log de confirmación
     
     res.status(201).json({
       mensaje: 'Usuario registrado exitosamente',
@@ -115,6 +134,84 @@ app.post('/api/registro', async (req, res) => {
       if (target.includes('cedula')) return res.status(400).json({ error: 'La cédula ya existe' });
     }
     res.status(500).json({ error: 'Error interno al registrar' });
+  }
+});
+
+/**
+ * OLVIDÉ CONTRASEÑA: Solicitar enlace de restablecimiento
+ * - No revela si el correo existe (respuesta genérica)
+ * - Envía correo con enlace al frontend para establecer nueva contraseña
+ */
+app.post('/api/password/forgot', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Correo requerido' });
+
+    // Buscar usuario; mantenemos respuesta genérica luego
+    const user = await prisma.usuario.findUnique({ where: { email } });
+
+    // Generar token solo si el usuario existe
+    let previewUrl = null;
+    let resetUrl = null;
+    if (user) {
+      const token = buildResetToken({ id: user.id, tipo: 'RESET' });
+
+      // URL de frontend (ajusta si tu host es distinto)
+      // Asumimos XAMPP sirve htdocs en http://localhost/Proyectoquinto
+      resetUrl = `http://localhost/proyectoquinto/Pages/restablecer.html?token=${encodeURIComponent(token)}`;
+
+      const info = await transporter.sendMail({
+        from: 'Soporte Oikos <correoderecuperacion869@gmail.com>',
+        to: email,
+        subject: 'Restablecer contraseña',
+        text: `Para restablecer tu contraseña, visita: ${resetUrl}\nEste enlace expira en 1 hora.`,
+        html: `<p>Para restablecer tu contraseña, haz clic en el siguiente enlace:</p>
+              <p><a href="${resetUrl}">Restablecer contraseña</a></p>
+              <p>El enlace expira en 1 hora.</p>`
+      });
+      console.log('Password reset email enviado:', { messageId: info.messageId, response: info.response, resetUrl });
+      if (nodemailer.getTestMessageUrl) {
+        previewUrl = nodemailer.getTestMessageUrl(info);
+      }
+    }
+
+    // Respuesta genérica
+    res.json({ mensaje: 'Si el correo existe, se envió un enlace.', resetUrl, previewUrl });
+  } catch (error) {
+    console.error('Error en forgot password:', error);
+    res.status(200).json({ mensaje: 'Si el correo existe, se envió un enlace.' });
+  }
+});
+
+/**
+ * OLVIDÉ CONTRASEÑA: Aplicar nueva contraseña
+ */
+app.post('/api/password/reset', async (req, res) => {
+  try {
+    const { token, password } = req.body;
+    if (!token || !password) return res.status(400).json({ error: 'Datos incompletos' });
+
+    let payload;
+    try {
+      payload = jwt.verify(token, process.env.JWT_SECRET || 'secreto_super_seguro');
+    } catch (e) {
+      return res.status(400).json({ error: 'Token inválido o expirado' });
+    }
+
+    if (payload.tipo !== 'RESET' || !payload.id) {
+      return res.status(400).json({ error: 'Token inválido' });
+    }
+
+    const password_hash = await bcrypt.hash(password, 10);
+    await prisma.usuario.update({
+      where: { id: payload.id },
+      data: { password_hash }
+    });
+
+    res.json({ mensaje: 'Contraseña actualizada correctamente' });
+  } catch (error) {
+    console.error('Error en reset password:', error);
+    res.status(500).json({ error: 'Error interno al restablecer contraseña' });
   }
 });
 
@@ -322,7 +419,7 @@ app.get('/api/anuncios', verificarToken, async (req, res) => {
       return res.status(400).json({ error: 'No perteneces a ninguna comunidad' });
     }
 
-    // 2. Buscar anuncios de ESA comunidad
+    // 2. Buscar anuncios de la comunidad actual
     const anuncios = await prisma.anuncio.findMany({
       where: { id_comunidad: usuario.id_comunidad },
       orderBy: { fecha_public: 'desc' }, // Los más nuevos primero
@@ -340,4 +437,11 @@ app.get('/api/anuncios', verificarToken, async (req, res) => {
 app.listen(port, async () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
   await inicializarRoles(); // <--- IMPORTANTE: Esto crea los roles
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error('SMTP no disponible para enviar correos:', error);
+    } else {
+      console.log('SMTP listo para enviar correos');
+    }
+  });
 });
