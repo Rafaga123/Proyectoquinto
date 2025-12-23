@@ -54,50 +54,34 @@ async function inicializarRoles() {
 // --- ENDPOINTS ---
 
 /**
- * REGISTRO DE USUARIO
+ * REGISTRO DE USUARIO (Versión Completa Oikos)
  */
 app.post('/api/registro', async (req, res) => {
   try {
+    // 1. Recibir TODOS los datos nuevos
     const { 
       cedula, email, password, 
       primer_nombre, segundo_nombre, 
       primer_apellido, segundo_apellido, 
       fecha_nacimiento,
-      telefono,
-      numero_casa,
-      tipo_habitante,
-      foto_perfil_url
+      telefono,       // Nuevo
+      numero_casa,    // Nuevo
+      tipo_habitante  // Nuevo
     } = req.body;
 
-    // 1. Validaciones básicas
+    // 2. Validaciones
     if (!cedula || !email || !password || !primer_nombre || !primer_apellido) {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
     }
 
-    // 1.1 Validaciones adicionales opcionales
-    if (telefono && !/^\+?\d{7,15}$/.test(telefono)) {
-      return res.status(400).json({ error: 'Teléfono no válido' });
-    }
-    if (numero_casa && !/^[A-Za-z0-9-]{1,10}$/.test(numero_casa)) {
-      return res.status(400).json({ error: 'Número de casa no válido' });
-    }
-    if (tipo_habitante && !['PROPIETARIO','INQUILINO','FAMILIAR','OTRO'].includes(tipo_habitante)) {
-      return res.status(400).json({ error: 'Tipo de habitante no válido' });
-    }
+    // 3. Buscar rol
+    const rolHabitante = await prisma.rol.findUnique({ where: { nombre: 'HABITANTE' } });
+    if (!rolHabitante) return res.status(500).json({ error: 'Error: Rol HABITANTE no existe' });
 
-    // 2. Buscar el ID del rol "HABITANTE"
-    const rolHabitante = await prisma.rol.findUnique({
-      where: { nombre: 'HABITANTE' }
-    });
-
-    if (!rolHabitante) {
-      return res.status(500).json({ error: 'Error del sistema: El rol HABITANTE no existe.' });
-    }
-
-    // 3. Encriptar contraseña
+    // 4. Hash password
     const password_hash = await bcrypt.hash(password, 10);
 
-    // 4. Crear usuario
+    // 5. Crear usuario (Ahora guardamos todo)
     const nuevoUsuario = await prisma.usuario.create({
       data: {
         cedula,
@@ -108,15 +92,16 @@ app.post('/api/registro', async (req, res) => {
         primer_apellido,
         segundo_apellido: segundo_apellido || null,
         fecha_nacimiento: fecha_nacimiento ? new Date(fecha_nacimiento) : null,
-        telefono: telefono || null,
-        numero_casa: numero_casa || null,
-        tipo_habitante: tipo_habitante || null,
-        foto_perfil_url: foto_perfil_url || null,
+        telefono: telefono || null,             // <--- Guardamos teléfono
+        numero_casa: numero_casa || null,       // <--- Guardamos casa
+        tipo_habitante: tipo_habitante || null, // <--- Guardamos tipo (PROPIETARIO, etc)
         id_rol: rolHabitante.id,
-        estado_solicitud: 'SIN_COMUNIDAD' // Valor por defecto del Enum
+        estado_solicitud: 'SIN_COMUNIDAD'
       }
     });
 
+    console.log("✅ Usuario registrado:", nuevoUsuario.email); // Log de confirmación
+    
     res.status(201).json({
       mensaje: 'Usuario registrado exitosamente',
       usuario: { id: nuevoUsuario.id, email: nuevoUsuario.email }
@@ -124,14 +109,12 @@ app.post('/api/registro', async (req, res) => {
 
   } catch (error) {
     console.error("Error en registro:", error);
-    
     if (error.code === 'P2002') {
       const target = error.meta?.target || "";
-      if (target.includes('email')) return res.status(400).json({ error: 'El correo ya está registrado' });
-      if (target.includes('cedula')) return res.status(400).json({ error: 'La cédula ya está registrada' });
+      if (target.includes('email')) return res.status(400).json({ error: 'El correo ya existe' });
+      if (target.includes('cedula')) return res.status(400).json({ error: 'La cédula ya existe' });
     }
-    
-    res.status(500).json({ error: 'Error interno al registrar usuario' });
+    res.status(500).json({ error: 'Error interno al registrar' });
   }
 });
 

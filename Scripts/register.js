@@ -180,11 +180,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await resp.json();
       if (!resp.ok) {
         return setError(data?.error || 'No se pudo registrar. Intente nuevamente.');
-      }
-
-      // Éxito: mostrar panel de comunidad
+      } else {
       alert('¡Registro exitoso! Por favor inicia sesión.');
       window.location.href = 'login.html';
+      }
+
+
 
     } catch (error) {
       console.error(error);
