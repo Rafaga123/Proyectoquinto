@@ -10,6 +10,8 @@
   padding:140px; 
 }
 
+
+
     .container { 
     max-width:980px; 
     margin:0 auto; 
@@ -17,6 +19,7 @@
     box-shadow:0 6px 24px rgba(16,24,40,0.06); 
     background: #a2b9ee;
     border-radius: 14px;
+    
   }
     
     h2 { 

@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+
+    
+
   // Preview banco
   const bancoDestino = document.getElementById('bancoDestino');
   const bankPreviewText = document.querySelector('#bankPreview .bank-text');
