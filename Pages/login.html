@@ -41,12 +41,13 @@
             </div>
             <button class="ui button primary fluid" type="submit">Entrar</button>
             <a class="item" href="home_page.html">Omitir</a>
+            <a class="item" href="admin.html">Omitir (gestor)</a>
             <div class="form-links">
                 ¿No tienes cuenta? <a href="register.html">Regístrate</a>
             </div>
             <div id="login-error-message" class="ui red message" style="display: none; margin-top: 1rem;"></div>
         </form>
-        <form class="ui form segment" id="forgotForm" style="display:none;">
+        <form class="ui form segment" id="forgotForm" style="display:none;" method="post" action="#">
             <h2 class="ui center aligned header" style="margin-bottom:1.5rem;">Recuperar contraseña</h2>
             <div class="field">
                 <label for="forgotEmail">Correo electrónico</label>

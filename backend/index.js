@@ -4,6 +4,7 @@ const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 
 const prisma = new PrismaClient();
 const app = express();
@@ -12,60 +13,94 @@ const port = 3000;
 app.use(express.json());
 app.use(cors());
 
-// --- FUNCIÓN DE INICIALIZACIÓN (Se ejecuta al iniciar el servidor) ---
+const verificarToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Formato: "Bearer TOKEN_AQUI"
+
+  if (!token) {
+    return res.status(401).json({ error: 'Acceso denegado: Se requiere autenticación' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET || 'secreto_super_seguro', (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: 'Token inválido o expirado' });
+    }
+    req.usuario = user; // ¡Magia! Guardamos los datos del usuario en la petición
+    next();
+  });
+};
+
 async function inicializarRoles() {
+  // Estos nombres deben coincidir EXACTAMENTE con tu enum RolNombre en schema.prisma
   const rolesNecesarios = ['ADMINISTRADOR', 'ENCARGADO_COMUNIDAD', 'HABITANTE'];
   
-  console.log("🔄 Verificando roles en la base de datos...");
+  console.log("Verificando roles en la base de datos...");
+
   
   for (const nombreRol of rolesNecesarios) {
+    // Buscamos si el rol ya existe
     const existe = await prisma.rol.findUnique({
-      where: { nombre: nombreRol } // Prisma sabe que esto es un Enum
+      where: { nombre: nombreRol } 
     });
     
+    // Si no existe, lo creamos
     if (!existe) {
       await prisma.rol.create({ data: { nombre: nombreRol } });
-      console.log(`✅ Rol creado: ${nombreRol}`);
+      console.log(`Rol creado: ${nombreRol}`);
     }
   }
-  console.log("✨ Sistema de roles listo.");
+  console.log("Sistema de roles listo.");
 }
+
+// --- Password reset helpers (scope global) ---
+function buildResetToken(payload) {
+  return jwt.sign(payload, process.env.JWT_SECRET || 'secreto_super_seguro', { expiresIn: '1h' });
+}
+
+// Configuración de Nodemailer (Gmail SMTP)
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.SMTP_USER || 'correoderecuperacion869@gmail.com',
+    pass: process.env.SMTP_PASS || 'xyfn gyek lies jvxa'
+  },
+  logger: true,
+  debug: true
+});
 
 // --- ENDPOINTS ---
 
 /**
- * REGISTRO DE USUARIO
- * Adaptado a la nueva tabla Usuario de Oikos
+ * REGISTRO DE USUARIO (Versión Completa Oikos)
  */
 app.post('/api/registro', async (req, res) => {
   try {
+    // 1. Recibir TODOS los datos nuevos
     const { 
       cedula, email, password, 
       primer_nombre, segundo_nombre, 
       primer_apellido, segundo_apellido, 
-      fecha_nacimiento 
+      fecha_nacimiento,
+      telefono,       // Nuevo
+      numero_casa,    // Nuevo
+      tipo_habitante  // Nuevo
     } = req.body;
 
-    // 1. Validaciones básicas
+    // 2. Validaciones
     if (!cedula || !email || !password || !primer_nombre || !primer_apellido) {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
     }
 
-    // 2. Buscar el ID del rol "HABITANTE"
-    // Ya no usamos el ID 3 fijo, lo buscamos por nombre para ser seguros
-    const rolHabitante = await prisma.rol.findUnique({
-      where: { nombre: 'HABITANTE' }
-    });
+    // 3. Buscar rol
+    const rolHabitante = await prisma.rol.findUnique({ where: { nombre: 'HABITANTE' } });
+    if (!rolHabitante) return res.status(500).json({ error: 'Error: Rol HABITANTE no existe' });
 
-    if (!rolHabitante) {
-      return res.status(500).json({ error: 'Error del sistema: El rol HABITANTE no existe.' });
-    }
-
-    // 3. Encriptar contraseña
+    // 4. Hash password
     const password_hash = await bcrypt.hash(password, 10);
 
-    // 4. Crear usuario
-    // Nota: 'estado_solicitud' se pone en 'SIN_COMUNIDAD' por defecto en la BD
+    // 5. Crear usuario (Ahora guardamos todo)
     const nuevoUsuario = await prisma.usuario.create({
       data: {
         cedula,
@@ -76,11 +111,16 @@ app.post('/api/registro', async (req, res) => {
         primer_apellido,
         segundo_apellido: segundo_apellido || null,
         fecha_nacimiento: fecha_nacimiento ? new Date(fecha_nacimiento) : null,
+        telefono: telefono || null,             // <--- Guardamos teléfono
+        numero_casa: numero_casa || null,       // <--- Guardamos casa
+        tipo_habitante: tipo_habitante || null, // <--- Guardamos tipo (PROPIETARIO, etc)
         id_rol: rolHabitante.id,
-        // id_comunidad se queda en null
+        estado_solicitud: 'SIN_COMUNIDAD'
       }
     });
 
+    console.log("Usuario registrado:", nuevoUsuario.email); // Borrar esto luego Log de confirmación
+    
     res.status(201).json({
       mensaje: 'Usuario registrado exitosamente',
       usuario: { id: nuevoUsuario.id, email: nuevoUsuario.email }
@@ -88,21 +128,95 @@ app.post('/api/registro', async (req, res) => {
 
   } catch (error) {
     console.error("Error en registro:", error);
-    
-    // Manejo de errores de Prisma (P2002 es violación de campo único)
     if (error.code === 'P2002') {
       const target = error.meta?.target || "";
-      if (target.includes('email')) return res.status(400).json({ error: 'El correo ya está registrado' });
-      if (target.includes('cedula')) return res.status(400).json({ error: 'La cédula ya está registrada' });
+      if (target.includes('email')) return res.status(400).json({ error: 'El correo ya existe' });
+      if (target.includes('cedula')) return res.status(400).json({ error: 'La cédula ya existe' });
     }
-    
-    res.status(500).json({ error: 'Error interno al registrar usuario' });
+    res.status(500).json({ error: 'Error interno al registrar' });
+  }
+});
+
+/**
+ * OLVIDÉ CONTRASEÑA: Solicitar enlace de restablecimiento
+ * - No revela si el correo existe (respuesta genérica)
+ * - Envía correo con enlace al frontend para establecer nueva contraseña
+ */
+app.post('/api/password/forgot', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Correo requerido' });
+
+    // Buscar usuario; mantenemos respuesta genérica luego
+    const user = await prisma.usuario.findUnique({ where: { email } });
+
+    // Generar token solo si el usuario existe
+    let previewUrl = null;
+    let resetUrl = null;
+    if (user) {
+      const token = buildResetToken({ id: user.id, tipo: 'RESET' });
+
+      // URL de frontend (ajusta si tu host es distinto)
+      // Asumimos XAMPP sirve htdocs en http://localhost/Proyectoquinto
+      resetUrl = `http://localhost/proyectoquinto/Pages/restablecer.html?token=${encodeURIComponent(token)}`;
+
+      const info = await transporter.sendMail({
+        from: 'Soporte Oikos <correoderecuperacion869@gmail.com>',
+        to: email,
+        subject: 'Restablecer contraseña',
+        text: `Para restablecer tu contraseña, visita: ${resetUrl}\nEste enlace expira en 1 hora.`,
+        html: `<p>Para restablecer tu contraseña, haz clic en el siguiente enlace:</p>
+              <p><a href="${resetUrl}">Restablecer contraseña</a></p>
+              <p>El enlace expira en 1 hora.</p>`
+      });
+      console.log('Password reset email enviado:', { messageId: info.messageId, response: info.response, resetUrl });
+      if (nodemailer.getTestMessageUrl) {
+        previewUrl = nodemailer.getTestMessageUrl(info);
+      }
+    }
+
+    // Respuesta genérica
+    res.json({ mensaje: 'Si el correo existe, se envió un enlace.', resetUrl, previewUrl });
+  } catch (error) {
+    console.error('Error en forgot password:', error);
+    res.status(200).json({ mensaje: 'Si el correo existe, se envió un enlace.' });
+  }
+});
+
+/**
+ * OLVIDÉ CONTRASEÑA: Aplicar nueva contraseña
+ */
+app.post('/api/password/reset', async (req, res) => {
+  try {
+    const { token, password } = req.body;
+    if (!token || !password) return res.status(400).json({ error: 'Datos incompletos' });
+
+    let payload;
+    try {
+      payload = jwt.verify(token, process.env.JWT_SECRET || 'secreto_super_seguro');
+    } catch (e) {
+      return res.status(400).json({ error: 'Token inválido o expirado' });
+    }
+
+    if (payload.tipo !== 'RESET' || !payload.id) {
+      return res.status(400).json({ error: 'Token inválido' });
+    }
+
+    const password_hash = await bcrypt.hash(password, 10);
+    await prisma.usuario.update({
+      where: { id: payload.id },
+      data: { password_hash }
+    });
+
+    res.json({ mensaje: 'Contraseña actualizada correctamente' });
+  } catch (error) {
+    console.error('Error en reset password:', error);
+    res.status(500).json({ error: 'Error interno al restablecer contraseña' });
   }
 });
 
 /**
  * INICIO DE SESIÓN (LOGIN)
- * Ahora devuelve el estado de la solicitud para redirigir correctamente
  */
 app.post('/api/login', async (req, res) => {
   try {
@@ -136,7 +250,6 @@ app.post('/api/login', async (req, res) => {
     }
 
     // 3. Generar Token
-    // Incluimos el estado_solicitud en el token por si acaso
     const token = jwt.sign(
       { 
         id: userFound.id, 
@@ -147,7 +260,7 @@ app.post('/api/login', async (req, res) => {
       { expiresIn: '1d' }
     );
 
-    // 4. Responder con datos clave para el frontend
+    // 4. Responder
     res.json({
       mensaje: 'Bienvenido',
       token,
@@ -156,7 +269,7 @@ app.post('/api/login', async (req, res) => {
         nombre: userFound.primer_nombre,
         apellido: userFound.primer_apellido,
         rol: userFound.rol.nombre,
-        estado_solicitud: userFound.estado_solicitud, // ¡CRUCIAL PARA LA REDIRECCIÓN!
+        estado_solicitud: userFound.estado_solicitud,
         id_comunidad: userFound.id_comunidad
       }
     });
@@ -167,8 +280,168 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Iniciar servidor y crear roles si no existen
+/**
+ * 1. CREAR COMUNIDAD (Para el Encargado)
+ * - Crea la comunidad
+ * - Genera un código único automático
+ * - Convierte al usuario creador en ENCARGADO_COMUNIDAD y lo acepta automáticamente
+ */
+app.post('/api/comunidades', verificarToken, async (req, res) => {
+  try {
+    const { nombre, direccion } = req.body;
+    const idUsuario = req.usuario.id; // Obtenido del token gracias al middleware
+
+    if (!nombre) return res.status(400).json({ error: 'El nombre es obligatorio' });
+
+    // Generar código único simple (ej: "RES-8821")
+    const aleatorio = Math.floor(1000 + Math.random() * 9000); 
+    const codigo_unico = `RES-${aleatorio}`;
+
+    // Transacción: Hacemos todo o nada para asegurar integridad
+    const resultado = await prisma.$transaction(async (tx) => {
+      // A. Crear la comunidad
+      const nuevaComunidad = await tx.comunidad.create({
+        data: {
+          nombre,
+          direccion,
+          codigo_unico
+        }
+      });
+
+      // B. Buscar ID del rol Encargado
+      const rolEncargado = await tx.rol.findUnique({ where: { nombre: 'ENCARGADO_COMUNIDAD' } });
+
+      // C. Actualizar al usuario (Lo volvemos Jefe y lo unimos)
+      const usuarioActualizado = await tx.usuario.update({
+        where: { id: idUsuario },
+        data: {
+          id_comunidad: nuevaComunidad.id,
+          id_rol: rolEncargado.id,
+          estado_solicitud: 'ACEPTADO', // El jefe se acepta a sí mismo
+          tipo_habitante: 'PROPIETARIO' // Asumimos que el jefe es propietario
+        }
+      });
+
+      return { comunidad: nuevaComunidad, usuario: usuarioActualizado };
+    });
+
+    res.status(201).json({
+      mensaje: 'Comunidad creada exitosamente',
+      codigo: resultado.comunidad.codigo_unico,
+      comunidad: resultado.comunidad
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al crear la comunidad' });
+  }
+});
+
+/**
+ * 2. UNIRSE A COMUNIDAD (Para el Habitante)
+ * - Busca la comunidad por código
+ * - Asigna al usuario a esa comunidad
+ * - Lo deja en estado PENDIENTE para que el jefe lo apruebe
+ */
+app.post('/api/comunidades/unirse', verificarToken, async (req, res) => {
+  try {
+    const { codigo, tipo_habitante, numero_casa } = req.body;
+    const idUsuario = req.usuario.id;
+
+    if (!codigo) return res.status(400).json({ error: 'El código es obligatorio' });
+
+    // A. Buscar la comunidad
+    const comunidad = await prisma.comunidad.findUnique({
+      where: { codigo_unico: codigo }
+    });
+
+    if (!comunidad) {
+      return res.status(404).json({ error: 'No existe ninguna comunidad con ese código' });
+    }
+
+    // B. Actualizar usuario
+    await prisma.usuario.update({
+      where: { id: idUsuario },
+      data: {
+        id_comunidad: comunidad.id,
+        estado_solicitud: 'PENDIENTE', // Queda esperando aprobación
+        tipo_habitante: tipo_habitante || 'OTRO',
+        numero_casa: numero_casa
+      }
+    });
+
+    res.json({ mensaje: 'Solicitud enviada. Espera a que el encargado te acepte.' });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al unirse a la comunidad' });
+  }
+});
+
+/**
+ * REGISTRAR UN PAGO
+ */
+app.post('/api/pagos', verificarToken, async (req, res) => {
+  try {
+    const { monto, concepto, referencia } = req.body;
+    const idUsuario = req.usuario.id;
+
+    const nuevoPago = await prisma.pago.create({
+      data: {
+        monto,
+        concepto,
+        referencia,
+        estado: 'PENDIENTE',
+        id_usuario: idUsuario
+        // nota: comprobante_url lo manejaremos luego con subida de archivos
+      }
+    });
+
+    res.status(201).json(nuevoPago);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al registrar el pago' });
+  }
+});
+
+/**
+ * VER EL MURO (ANUNCIOS) DE MI COMUNIDAD
+ * Solo muestra anuncios de la comunidad a la que pertenezco
+ */
+app.get('/api/anuncios', verificarToken, async (req, res) => {
+  try {
+    // 1. Averiguar de qué comunidad es el usuario
+    const usuario = await prisma.usuario.findUnique({
+      where: { id: req.usuario.id }
+    });
+
+    if (!usuario.id_comunidad) {
+      return res.status(400).json({ error: 'No perteneces a ninguna comunidad' });
+    }
+
+    // 2. Buscar anuncios de la comunidad actual
+    const anuncios = await prisma.anuncio.findMany({
+      where: { id_comunidad: usuario.id_comunidad },
+      orderBy: { fecha_public: 'desc' }, // Los más nuevos primero
+      include: { autor: { select: { primer_nombre: true, primer_apellido: true } } } // Mostrar quién escribió
+    });
+
+    res.json(anuncios);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener anuncios' });
+  }
+});
+
+// Iniciar servidor
 app.listen(port, async () => {
-  console.log(`🚀 Servidor Oikos corriendo en http://localhost:${port}`);
-  await inicializarRoles(); // <--- La magia ocurre aquí
+  console.log(`Servidor corriendo en http://localhost:${port}`);
+  await inicializarRoles(); // <--- IMPORTANTE: Esto crea los roles
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error('SMTP no disponible para enviar correos:', error);
+    } else {
+      console.log('SMTP listo para enviar correos');
+    }
+  });
 });
