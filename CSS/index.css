@@ -231,7 +231,7 @@ body {
     margin-bottom: 50px; /* Espacio abajo para separarlo del borde inferior */
 }
 
-/* Aplicamos todos los efectos a la clase principal del botón */
+/*Efectos de la clase principal del botón */
 .ui.huge.primary.button {
     background-color: #9A9CEA;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
