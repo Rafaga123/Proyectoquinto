@@ -75,15 +75,30 @@ body {
     align-items: flex-end;
 }
 
-.ui.container{
-    padding-left: 50px;
+
+.seccion-centrada {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; 
+    padding: 40px 0;
+    width: 100%;
 }
 
-.ui.middle.aligned.centered.grid.stackable {
 
-    padding: 60px 0;
-    margin: 0 !important; 
+.ui.grid.stackable {
+    margin: 0 !important;
     width: 100% !important;
+}
+
+.segment-redondeado {
+    border-radius: 15px !important;
+    height: 100%; 
+}
+
+
+.ui.image.centered {
+    margin-top: 20px; 
 }
 
 .cards-creadores {
